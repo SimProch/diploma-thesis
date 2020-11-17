@@ -1,4 +1,4 @@
-import { ModelProperties } from "./types";
+import { ModelProperties } from "../../types";
 
 const LINE_END = "\r\n";
 

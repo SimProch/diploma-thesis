@@ -1,13 +1,38 @@
 #!/usr/bin/env node
-import * as fs from 'fs-extra';
-import * as process from 'process';
-import * as yargs from 'yargs';
-import createInterface from './createInterface';
-import createModel from './createModel';
-import { interfaceProperties, modelProperties } from './fakeValues';
-import { InterfaceProperties, ModelProperties } from './types';
 
-let argv = yargs.command('generate', 'Generates data access', (yargs: yargs.Argv) => {
+import * as yargs from 'yargs';
+import { listDatabases } from './database-connection/listDatabases';
+import { listSchemas } from './database-connection/listSchemas';
+import { listStoredProcedures } from './database-connection/listStoredProcedures';
+import { generate } from './generate';
+
+const DEFAULT_DB_NAME = 'master';
+const DEFAULT_SCHEMA_NAME = void 0;
+
+
+
+const argv = yargs
+.command('config', 'Used for configuration file for default values, connection etc.', (yargs: yargs.Argv) => {
+	return yargs
+		.option('server', {
+			alias: 'srv',
+			string: true,
+			description: 'Saves server name for future calls',
+		})
+		.option('database', {
+			alias: 'db',
+			string: true,
+			description: 'Saves database name for future calls',
+		})
+		.option('schema', {
+			alias: 's',
+			string: true,
+			description: 'Saves schema name for future calls',
+		})
+}, (argv) => {
+	console.log('hit')	
+})
+.command('generate', 'Generates data access', (yargs: yargs.Argv) => {
 	return yargs
 		.option('tsinterface', {
 			alias: 'tsi',
@@ -41,31 +66,35 @@ let argv = yargs.command('generate', 'Generates data access', (yargs: yargs.Argv
 		});
 }, (argv) => {
 	generate(argv.tsinterface, argv.csmodel);
-}).argv;
-
-
-function generate(tsinterface: boolean, csmodel: boolean) {
-	if (tsinterface) createTsInterface('newInterface', interfaceProperties);
-	if (csmodel) createCsModel('newModel', modelProperties);
-}
-
-function createTsInterface(interfaceName: string, props: InterfaceProperties[]): void {
-	deleteFileIfExists(`${interfaceName}.ts`);
-	const newInterface = createInterface(interfaceName, props);
-	fs.appendFile(`${interfaceName}.ts`, newInterface, (err) => postCreateCallback(err, newInterface));
-}
-
-function createCsModel(modelName: string, props: ModelProperties[]): void {
-	deleteFileIfExists(`${modelName}.cs`);
-	const newModel = createModel(modelName, props);
-	fs.appendFile(`${modelName}.cs`, newModel, (err) => postCreateCallback(err, newModel));
-}
-
-function deleteFileIfExists(fileName: string): void {
-	if (fs.existsSync(fileName)) fs.unlinkSync(fileName);
-}
-
-function postCreateCallback(err: NodeJS.ErrnoException, newItem: string) {
-	if (err) throw err;
-	console.log(`Created ${newItem}`);
-}
+})
+.command('listDb', 'List available databases', (yargs: yargs.Argv) => yargs ,(argv) => {
+	listDatabases();
+})
+.command('listSchema', 'List available schemas from a database', (yargs: yargs.Argv) => {
+	return yargs
+	.option('database', {
+		alias: 'db',
+		string: true,
+		description: 'Specifies the database from which schemas should be fetched',
+		default: DEFAULT_DB_NAME,
+	});
+}, (argv) => {
+	listSchemas(argv.database);
+})
+.command('listSp', 'List available stored procedures from a database', (yargs: yargs.Argv) => {
+	return yargs
+	.option('database', {
+		alias: 'db',
+		string: true,
+		description: 'Specifies the database from which schemas should be fetched',
+		default: DEFAULT_DB_NAME,
+	})
+	.option('schema', {
+		alias: 's',
+		string: true,
+		description: 'Specifies the of schema from which stored procedures should be fetched',
+		default: DEFAULT_SCHEMA_NAME,
+	});
+}, (argv) => {
+	listStoredProcedures(argv.database, argv.schema);
+}).argv

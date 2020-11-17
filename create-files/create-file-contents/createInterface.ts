@@ -1,4 +1,4 @@
-import { InterfaceProperties } from './types';
+import { InterfaceProperties } from '../../types';
 
 const LINE_END = '\r\n';
 
