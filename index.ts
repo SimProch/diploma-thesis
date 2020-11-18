@@ -1,15 +1,17 @@
 #!/usr/bin/env node
 
 import * as yargs from 'yargs';
+import { configure, initializeConfig } from './configure';
 import { listDatabases } from './database-connection/listDatabases';
 import { listSchemas } from './database-connection/listSchemas';
 import { listStoredProcedures } from './database-connection/listStoredProcedures';
 import { generate } from './generate';
+import { ConfigureArguments } from './types';
 
 const DEFAULT_DB_NAME = 'master';
 const DEFAULT_SCHEMA_NAME = void 0;
 
-
+initializeConfig()
 
 const argv = yargs
 .command('config', 'Used for configuration file for default values, connection etc.', (yargs: yargs.Argv) => {
@@ -29,8 +31,8 @@ const argv = yargs
 			string: true,
 			description: 'Saves schema name for future calls',
 		})
-}, (argv) => {
-	console.log('hit')	
+}, (argv: ConfigureArguments) => {
+	configure(argv)
 })
 .command('generate', 'Generates data access', (yargs: yargs.Argv) => {
 	return yargs

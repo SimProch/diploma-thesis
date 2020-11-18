@@ -8,6 +8,6 @@ export function listDatabases(): void {
     async function doListDatabases(pool: sql.ConnectionPool): Promise<void> {
         const request = new sql.Request(pool);
         const result = await request.query(getDatabaseListQuery());
-        console.log(result);
+        console.log(result.recordset);
     }
 }

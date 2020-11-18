@@ -16,3 +16,9 @@ export interface ModelProperties {
 	typeName: CSType;
 	isNullable: boolean;
 }
+
+export interface ConfigureArguments {
+	server: string;
+	database: string;
+	schema: string;
+}
