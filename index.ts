@@ -1,19 +1,18 @@
 #!/usr/bin/env node
 
 import * as yargs from "yargs";
-import { alias, option } from "yargs";
-import { configure, initializeConfig } from "./configure";
+import { configure, getConfigObject, initializeConfig } from "./configure";
+import { initSqlConfig } from "./database-connection/databaseConnection";
 import { listDatabases } from "./database-connection/listDatabases";
+import { listProcedureInput } from "./database-connection/listProcedureInput";
+import { listProcedureOutput } from "./database-connection/listProcedureOutput";
 import { listSchemas } from "./database-connection/listSchemas";
 import { listStoredProcedures } from "./database-connection/listStoredProcedures";
 import { generate } from "./generate";
-import { GlobalConfiguration, MethodCallType } from "./types";
-
-const DEFAULT_DB_NAME = "master";
-const DEFAULT_SCHEMA_NAME = void 0;
+import { GlobalConfiguration, MethodCallType } from "./types/cli.types";
 
 initializeConfig();
-
+initSqlConfig();
 
 const argv = getListingCommands(getConfigCommand(getGenerateCommand(yargs(process.argv.slice(2))))).argv;
 
@@ -106,17 +105,17 @@ function getConfigCommand(yargs: yargs.Argv): yargs.Argv {
 					string: true,
 					description: "Saves path to which generate controller name for future calls",
 				})
-				
+
 				.alias("srv", "server")
 				.alias("db", "database")
 				.alias("s", "schema")
-				.alias("ct","callType")
-				.alias("gc","generateController")
-				.alias("gda","generateDataAccess")
-				.alias("gm","generateModel")
-				.alias("gi","generateInterface")
-				.alias("dap","dataAccessPath")
-				.alias("cp","controllerPath")
+				.alias("ct", "callType")
+				.alias("gc", "generateController")
+				.alias("gda", "generateDataAccess")
+				.alias("gm", "generateModel")
+				.alias("gi", "generateInterface")
+				.alias("dap", "dataAccessPath")
+				.alias("cp", "controllerPath");
 		},
 		(argv) => {
 			const config: GlobalConfiguration = {
@@ -148,12 +147,13 @@ function getListingCommands(yargs: yargs.Argv): yargs.Argv {
 			"listSchema",
 			"List available schemas from a database",
 			(yargs: yargs.Argv) => {
-				return yargs.option("database", {
-					alias: "db",
-					string: true,
-					description: "Specifies the database from which schemas should be fetched",
-					default: DEFAULT_DB_NAME,
-				});
+				return yargs
+					.option("database", {
+						string: true,
+						description: "Specifies the database from which schemas should be fetched",
+						default: getConfigObject().global.database,
+					})
+					.alias("db", "database");
 			},
 			(argv) => listSchemas(argv.database)
 		)
@@ -163,18 +163,68 @@ function getListingCommands(yargs: yargs.Argv): yargs.Argv {
 			(yargs: yargs.Argv) => {
 				return yargs
 					.option("database", {
-						alias: "db",
 						string: true,
 						description: "Specifies the database from which schemas should be fetched",
-						default: DEFAULT_DB_NAME,
+						default: getConfigObject().global.database,
 					})
 					.option("schema", {
-						alias: "s",
 						string: true,
 						description: "Specifies the of schema from which stored procedures should be fetched",
-						default: DEFAULT_SCHEMA_NAME,
-					});
+						default: getConfigObject().global.schema,
+					})
+					.alias("db", "database")
+					.alias("s", "schema");
 			},
 			(argv) => listStoredProcedures(argv.database, argv.schema)
+		)
+		.command(
+			"listSpInputs",
+			"List available stored procedures from a database",
+			(yargs: yargs.Argv) => {
+				return yargs
+					.option("database", {
+						string: true,
+						description: "Specifies the database from which schemas should be fetched",
+						default: getConfigObject().global.database,
+					})
+					.option("schema", {
+						string: true,
+						description: "Specifies the of schema from which stored procedures should be fetched",
+						default: getConfigObject().global.schema,
+					})
+					.option("storedProcedureName", {
+						string: true,
+						description: "Specifies the of schema from which stored procedures should be fetched",
+					})
+					.alias("db", "database")
+					.alias("s", "schema")
+					.alias("sp", "storedProcedureName");
+			},
+			(argv) => listProcedureInput(argv.database, argv.schema, argv.storedProcedureName)
+		)
+		.command(
+			"listSpOutputs",
+			"List available stored procedure outputs from a database",
+			(yargs: yargs.Argv) => {
+				return yargs
+					.option("database", {
+						string: true,
+						description: "Specifies the database from which schemas should be fetched",
+						default: getConfigObject().global.database,
+					})
+					.option("schema", {
+						string: true,
+						description: "Specifies the of schema from which stored procedures should be fetched",
+						default: getConfigObject().global.schema,
+					})
+					.option("storedProcedureName", {
+						string: true,
+						description: "Specifies the of schema from which stored procedures should be fetched",
+					})
+					.alias("db", "database")
+					.alias("s", "schema")
+					.alias("sp", "storedProcedureName");
+			},
+			(argv) => listProcedureOutput(argv.database, argv.schema, argv.storedProcedureName)
 		);
 }

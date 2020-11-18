@@ -5,8 +5,8 @@ export function getDatabaseListQuery(): string {
 }
 
 export function getStoredProcedureListQuery(databaseName: string, schema?: string): string {
-    if (!schema) return `select ROUTINE_NAME from ${databaseName}.INFORMATION_SCHEMA.ROUTINES where ROUTINE_TYPE = 'PROCEDURE'`;
-	return `select ROUTINE_NAME from ${databaseName}.INFORMATION_SCHEMA.ROUTINES where ROUTINE_TYPE = 'PROCEDURE' AND ROUTINE_SCHEMA = '${schema}'`;
+    if (!schema) return `SELECT ROUTINE_NAME FROM ${databaseName}.INFORMATION_SCHEMA.ROUTINES WHERE ROUTINE_TYPE = 'PROCEDURE'`;
+	return `SELECT ROUTINE_NAME FROM ${databaseName}.INFORMATION_SCHEMA.ROUTINES WHERE ROUTINE_TYPE = 'PROCEDURE' AND ROUTINE_SCHEMA = '${schema}'`;
 
 }
 
@@ -16,9 +16,13 @@ export function getSchemaListQuery(databaseName: string): string {
 }
 
 export function getProcedureOutputListQuery(databaseName: string, schemaName: string, storedProcedureName: string): string {
-    return `exec sp_describe_first_result_set N'${databaseName}.${schemaName}.${storedProcedureName}'`
+    return `EXEC sp_describe_first_result_set N'${databaseName}.${schemaName}.${storedProcedureName}'`
 }
 
 export function getProcedureInputListQuery(databaseName: string, schemaName: string, storedProcedureName: string): string {
-    return `select name, system_type_id from ${databaseName}.sys.parameters where object_id = object_id('${databaseName}.${schemaName}.${storedProcedureName}')`
+    return `SELECT name, system_type_id FROM ${databaseName}.sys.parameters WHERE object_id = object_id('${databaseName}.${schemaName}.${storedProcedureName}')`
+}
+
+export function getDbTypeListQuery(databaseName): string {
+    return `SELECT name, system_type_id FROM ${databaseName}.sys.types`;
 }

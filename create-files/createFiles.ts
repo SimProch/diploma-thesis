@@ -1,8 +1,8 @@
 import * as fs from 'fs-extra';
 import * as path from 'path';
+import { InterfaceProperties, ModelProperties } from '../types/mapping.types';
 import createInterface from './create-file-contents/createInterface';
 import createModel from './create-file-contents/createModel';
-import { InterfaceProperties, ModelProperties } from '../types';
 
 const rootDirectory = path.dirname(require.main.filename);
 

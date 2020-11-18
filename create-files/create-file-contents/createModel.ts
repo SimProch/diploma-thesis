@@ -1,4 +1,4 @@
-import { ModelProperties } from "../../types";
+import { CSType, ModelProperties } from "../../types/mapping.types";
 
 const LINE_END = "\r\n";
 
@@ -14,7 +14,7 @@ export default function createModel(interfaceName: string, properties: ModelProp
 }
 
 
-function addTypeLine(propertyName: string, typeName: string, isNullable: boolean): string {
+function addTypeLine(propertyName: string, typeName: CSType, isNullable: boolean): string {
     const typingToAdd = `    public ${typeName}${isNullable ? "?" : ""} ${propertyName} { get; set; }${LINE_END}`;
     return typingToAdd;
 }

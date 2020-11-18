@@ -1,4 +1,4 @@
-import { InterfaceProperties } from '../../types';
+import { InterfaceProperties, TSType } from "../../types/mapping.types";
 
 const LINE_END = '\r\n';
 
@@ -13,7 +13,7 @@ export default function createInterface(interfaceName: string, properties: Inter
 	return result;
 }
 
-function addTypeLine(propertyName: string, typeName: string, isNullable: boolean): string {
+function addTypeLine(propertyName: string, typeName: TSType, isNullable: boolean): string {
 	const typingToAdd = `    ${propertyName}${isNullable ? '?' : ''}: ${typeName};${LINE_END}`;
 	return typingToAdd;
 }

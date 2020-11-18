@@ -1,5 +1,6 @@
-import { CommandArguments, Configuration, GlobalConfiguration } from "./types";
+import { Configuration, GlobalConfiguration } from "./types/cli.types";
 import * as fs from "fs-extra";
+import { DEFAULT_DB_NAME, DEFAULT_SERVER_NAME } from "./database-connection/databaseConnection";
 
 const CONFIG_NAME = "config.json";
 const DEFAULT_CONFIG = {
@@ -18,6 +19,9 @@ export function initializeConfig(): void {
 }
 
 export function configure(config: GlobalConfiguration): void {
+    if (!config.database) config.database = DEFAULT_DB_NAME;
+    if (!config.server) config.server = DEFAULT_SERVER_NAME;
+    
     if (config.server) addKeyValuePair(globalConfig.global, "server", config.server);
 	if (config.database) addKeyValuePair(globalConfig.global, "database", config.database);
 	if (config.schema) addKeyValuePair(globalConfig.global, "schema", config.schema);
@@ -35,6 +39,6 @@ export function addKeyValuePair(namespace: object, key: string, value: string | 
 	fs.writeFileSync(CONFIG_NAME, JSON.stringify(globalConfig, null, 4), { encoding: "utf8" });
 }
 
-export function getConfigObjects(): object {
+export function getConfigObject(): Configuration {
 	return globalConfig;
 }

@@ -1,14 +1,6 @@
 {
     "global": {
-        "server": "dev-srv01",
-        "database": "BGM2020",
-        "schema": "ui",
-        "callType": "ExecuteToCacheAsync",
-        "generateController": true,
-        "generateDataAccess": true,
-        "generateModel": true,
-        "generateInterface": true,
-        "dataAccessPath": "./result",
-        "controllerPath": "./result"
+        "server": "localhost\\SQLEXPRESS01",
+        "database": "master"
     }
 }

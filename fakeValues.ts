@@ -1,4 +1,4 @@
-import { InterfaceProperties, ModelProperties } from "./types";
+import { InterfaceProperties, ModelProperties } from "./types/mapping.types";
 
 export const interfaceProperties: InterfaceProperties[] = [
 	{
