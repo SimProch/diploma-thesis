@@ -2,7 +2,7 @@ import { InterfaceProperties, TSType } from "../../types/mapping.types";
 
 const LINE_END = '\r\n';
 
-export default function createInterface(interfaceName: string, properties: InterfaceProperties[]): string {
+export default function getInterface(interfaceName: string, properties: InterfaceProperties[]): string {
 	const interfaceStart = `export interface ${interfaceName} {${LINE_END}`;
 	const interfaceEnd = `}`;
 	let typing = '';

@@ -1,14 +1,17 @@
 import * as sql from "mssql/msnodesqlv8";
+import { StoredProcedureQueryResult } from "../types/queries.types";
 import { tryConnect } from "./databaseConnection";
 import { getStoredProcedureListQuery } from "./queries";
 
-export function listStoredProcedures(databaseName: string, schemaName: string): void {
-    tryConnect(doListStoredProcedures)
+export function listStoredProcedures(databaseName: string, schemaName: string): Promise<sql.IRecordSet<StoredProcedureQueryResult>> {
+    if (!databaseName) throw new Error("This command requires a database specified");
+	if (!schemaName) throw new Error("This command requires a schema specified");
+    return tryConnect().then(doListStoredProcedures);
 
 
-    async function doListStoredProcedures(pool: sql.ConnectionPool): Promise<void> {
+    async function doListStoredProcedures(pool: sql.ConnectionPool): Promise<sql.IRecordSet<StoredProcedureQueryResult>> {
         const request = new sql.Request(pool);
-        const result = await request.query(getStoredProcedureListQuery(databaseName, schemaName));
-        console.log(result.recordset);
+        const result = (await request.query<StoredProcedureQueryResult>(getStoredProcedureListQuery(databaseName, schemaName))).recordsets[0];
+        return result;
     }
 }

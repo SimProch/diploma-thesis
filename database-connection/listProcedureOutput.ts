@@ -4,13 +4,13 @@ import { DbDescriptionType, OutputList } from "../types/queries.types";
 import { tryConnect } from "./databaseConnection";
 import { getDbTypeListQuery, getProcedureOutputListQuery } from "./queries";
 
-export function listProcedureOutput(databaseName: string, schemaName: string, storedProcedureName: string): void {
+export function listProcedureOutput(databaseName: string, schemaName: string, storedProcedureName: string): Promise<OutputList> {
 	if (!databaseName) throw new Error("This command requires a database specified");
 	if (!schemaName) throw new Error("This command requires a schema specified");
 	if (!storedProcedureName) throw new Error("This command requires a stored procedure name specified");
-	tryConnect(doListStoredProcedureOutput);
+	return tryConnect().then(doListStoredProcedureOutput);
 
-	async function doListStoredProcedureOutput(pool: sql.ConnectionPool): Promise<void> {
+	async function doListStoredProcedureOutput(pool: sql.ConnectionPool): Promise<OutputList> {
 		const request = new sql.Request(pool);
 		const output = (await request.query<DbDescriptionType>(getProcedureOutputListQuery(databaseName, schemaName, storedProcedureName)))
 			.recordsets[0];
@@ -20,9 +20,10 @@ export function listProcedureOutput(databaseName: string, schemaName: string, st
 			return {
 				outputName: output.name,
 				variableName: variableName,
+				maxLength: output.max_length,
+				isNullable: output.is_nullable
 			};
 		});
-		console.log("Resulting properties:");
-		console.log(result);
+		return result;
 	}
 }

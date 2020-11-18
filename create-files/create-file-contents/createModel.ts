@@ -2,7 +2,7 @@ import { CSType, ModelProperties } from "../../types/mapping.types";
 
 const LINE_END = "\r\n";
 
-export default function createModel(interfaceName: string, properties: ModelProperties[]): string {
+export default function getModel(interfaceName: string, properties: ModelProperties[]): string {
     const interfaceStart = `public class ${interfaceName} {${LINE_END}`;
     const interfaceEnd = `}`;
     let typing = "";

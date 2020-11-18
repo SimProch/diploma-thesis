@@ -20,7 +20,7 @@ export function getProcedureOutputListQuery(databaseName: string, schemaName: st
 }
 
 export function getProcedureInputListQuery(databaseName: string, schemaName: string, storedProcedureName: string): string {
-    return `SELECT name, system_type_id FROM ${databaseName}.sys.parameters WHERE object_id = object_id('${databaseName}.${schemaName}.${storedProcedureName}')`
+    return `SELECT name, system_type_id, is_nullable, max_length FROM ${databaseName}.sys.parameters WHERE object_id = object_id('${databaseName}.${schemaName}.${storedProcedureName}')`
 }
 
 export function getDbTypeListQuery(databaseName): string {

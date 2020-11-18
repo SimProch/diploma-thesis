@@ -1,6 +1,10 @@
 {
     "global": {
         "server": "localhost\\SQLEXPRESS01",
-        "database": "master"
+        "database": "DataAccessGenerator_v2",
+        "schema": "ui",
+        "generateInterface": true,
+        "generateModel": true,
+        "generateDataAccess": true
     }
 }

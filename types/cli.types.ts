@@ -14,6 +14,7 @@ export interface GlobalConfiguration {
 }
 
 export interface CommandArguments extends GlobalConfiguration {
+	storedProcedureName: string;
 	httpMethodType: "POST" | "GET";
 	route: string;
 }

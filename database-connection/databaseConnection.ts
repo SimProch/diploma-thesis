@@ -17,13 +17,11 @@ export function initSqlConfig(): void {
 	};
 }
 
-export function tryConnect(connectionCallback: (pool: sql.ConnectionPool) => void): void {
+export async function tryConnect(): Promise<sql.ConnectionPool> {
 	try {
 		const pool = new sql.ConnectionPool(config);
-		pool.connect()
-			.then(() => connectionCallback(pool))
-			.catch((err) => console.log(err));
+		return await pool.connect()
 	} catch (error) {
-		console.error(error);
+		throw new Error(error);
 	}
 }

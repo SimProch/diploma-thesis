@@ -19,10 +19,10 @@ export function initializeConfig(): void {
 }
 
 export function configure(config: GlobalConfiguration): void {
-    if (!config.database) config.database = DEFAULT_DB_NAME;
-    if (!config.server) config.server = DEFAULT_SERVER_NAME;
-    
-    if (config.server) addKeyValuePair(globalConfig.global, "server", config.server);
+	if (!config.database && !globalConfig.global.database) config.database = DEFAULT_DB_NAME;
+	if (!config.server && !globalConfig.global.server) config.server = DEFAULT_SERVER_NAME;
+
+	if (config.server) addKeyValuePair(globalConfig.global, "server", config.server);
 	if (config.database) addKeyValuePair(globalConfig.global, "database", config.database);
 	if (config.schema) addKeyValuePair(globalConfig.global, "schema", config.schema);
 	if (config.callType) addKeyValuePair(globalConfig.global, "callType", config.callType);

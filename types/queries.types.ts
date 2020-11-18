@@ -18,16 +18,22 @@ export type TypeQueryResult = DbDescriptionType[];
 export interface DbDescriptionType {
     name: string;
     system_type_id: number;
+    max_length: number;
+    is_nullable: boolean;
 }
 
 export type OutputList = Output[];
-interface Output {
+export interface Output {
     outputName: string;
     variableName: DBType;
+    maxLength: number;
+    isNullable: boolean;
 }
 
 export type InputList = Input[];
 export interface Input {
     inputName: string;
     variableName: DBType;
+    maxLength: number;
+    isNullable: boolean;
 }

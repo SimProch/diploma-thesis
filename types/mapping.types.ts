@@ -29,6 +29,13 @@ export type DataAccessEnumType =
 	| "VarChar"
 	| "Xml";
 
+export interface CommandDefinitionProperties {
+	propertyName: string;
+	typeName: DataAccessEnumType;
+	isNullable: boolean;
+	maxLength: number;
+}
+
 export interface InterfaceProperties {
 	propertyName: string;
 	typeName: TSType;
@@ -50,6 +57,7 @@ export enum DbToCsharpModel {
 	bigint = "Int64",
 	uniqueidentifier = "Guid",
 	date = "DateTime",
+	datetime = "DateTime",
 	datetime2 = "DateTime",
 	float = "double",
 	decimal = "decimal",
@@ -110,12 +118,12 @@ export enum DbToCsCommandDefinition {
 	xml = "Xml",
 }
 
-export function mapDbToCsCommandDefinition(key: DbToCsCommandDefinition): string {
+export function mapDbToCsCommandDefinition(key: DBType): string {
 	return DbToCsCommandDefinition[key];
 }
-export function mapDbToTsTsInterface(key: DbToTsInterface): string {
+export function mapDbToTsTsInterface(key: DBType): string {
 	return DbToTsInterface[key];
 }
-export function mapDbToCsModel(key: DbToCsharpModel): string {
+export function mapDbToCsModel(key: DBType): string {
 	return DbToCsharpModel[key];
 }
