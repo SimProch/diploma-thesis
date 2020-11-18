@@ -17,8 +17,29 @@ export interface ModelProperties {
 	isNullable: boolean;
 }
 
-export interface ConfigureArguments {
+
+export type MethodCallType = 'ToDynamic';
+
+export interface GlobalConfiguration {
 	server: string;
 	database: string;
 	schema: string;
+	callType: MethodCallType;
+	generateController: boolean;
+	generateDataAccess: boolean;
+	generateModel: boolean;
+	generateInterface: boolean;
+	dataAccessPath: string;
+	controllerPath: string;
+}
+
+
+export interface CommandArguments extends GlobalConfiguration {
+	httpMethodType: "POST" | "GET",
+	route: string;
+}
+
+export interface Configuration {
+	global: GlobalConfiguration;
+	[key: string]: CommandArguments;
 }
