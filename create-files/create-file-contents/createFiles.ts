@@ -1,10 +1,14 @@
 import * as fs from "fs-extra";
 import * as path from "path";
+import { MethodCallType } from "../../types/cli.types";
 import { CommandDefinitionProperties, InterfaceProperties, ModelProperties } from "../../types/mapping.types";
-import getCommandDefinition from "./createCommandDefinition";
-import getInterface from "./createInterface";
-import getModel from "./createModel";
+import getCommandDefinition from "./getCommandDefinition";
+import getController from "./getController";
+import getDataAccess from "./getDataAccess";
+import getInterface from "./getInterface";
+import getModel from "./getModel";
 
+const LINE_END = "\r\n";
 const rootDirectory = path.dirname(require.main.filename);
 
 export function createTsInterface(interfaceName: string, props: InterfaceProperties[]): void {
@@ -19,11 +23,31 @@ export function createCsModel(modelName: string, props: ModelProperties[]): void
 	const newModel = getModel(modelName, props);
 	fs.appendFile(filePath, newModel, (err) => postCreateCallback(err, filePath));
 }
-export function createCommandDefinition(cdName: string, schema: string, spName: string, props: CommandDefinitionProperties[]): void {
-	const filePath = `${rootDirectory}/result/${cdName}.cs`;
+export function createDataAccess(
+	methodType: MethodCallType,
+	schema: string,
+	spName: string,
+	props: CommandDefinitionProperties[],
+	modelProps: ModelProperties[]
+): void {
+	const filePath = `${rootDirectory}/result/${spName}.cs`;
 	deleteFileIfExists(filePath);
-	const newModel = getCommandDefinition(schema, spName, props);
-	fs.appendFile(filePath, newModel, (err) => postCreateCallback(err, filePath));
+	const dataAccessMethod = getDataAccess(methodType, spName, "modelName", modelProps);
+	const commandDefinition = getCommandDefinition(schema, spName, props);
+	const fileContents = `public class DataAccess { ${LINE_END + dataAccessMethod + LINE_END + LINE_END + commandDefinition + LINE_END}}`
+	fs.appendFile(filePath, fileContents, (err) => postCreateCallback(err, filePath));
+}
+
+export function createController(
+	methodType: MethodCallType,
+	spName: string,
+	props: CommandDefinitionProperties[],
+	modelProps: ModelProperties[]
+): void {
+	const filePath = `${rootDirectory}/result/${spName}.cs`;
+	deleteFileIfExists(filePath);
+	const controller = getController(methodType, spName, "modelName", modelProps);
+	fs.appendFile(filePath, controller, (err) => postCreateCallback(err, filePath));
 }
 
 function deleteFileIfExists(fileName: string): void {

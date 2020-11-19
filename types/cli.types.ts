@@ -1,4 +1,7 @@
-export type MethodCallType = "ToDynamic";
+type NonTypedCallTypes = "ExecuteToDynamic" | "ExecuteToDynamicAsync";
+type TypedCallTypes = "ExecuteToObjects" | "ExecuteToObjectsAsync" | "ExecuteToCacheAsync";
+type VoidCallTypes = "ExecuteNonQuery";
+export type MethodCallType = NonTypedCallTypes | TypedCallTypes | VoidCallTypes;
 
 export interface GlobalConfiguration {
 	server: string;
