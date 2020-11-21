@@ -5,7 +5,7 @@ import { listProcedureOutput } from "../database-connection/listProcedureOutput"
 import { CommandArguments } from "../types/cli.types";
 import { CommandDefinitionProperties, InterfaceProperties, ModelProperties } from "../types/mapping.types";
 import { InputList, OutputList } from "../types/queries.types";
-import { createTsInterface, createCsModel, createDataAccess } from "./create-file-contents/createFiles";
+import { createTsInterface, createCsModel, createDataAccess, createController } from "./create-file-contents/createFiles";
 import { getControllerArguments } from "./create-file-contents/types/file-contents.types";
 import {
 	getCommandDefinitionPropertiesFromRecordList,
@@ -43,11 +43,13 @@ export function generate(args: CommandArguments) {
 					methodType: args.callType,
 					outputModelName: outputModelName,
 					inputModelName: inputModelName,
-					classMethodName: args.controllerPath,
+					classMethodName: "controllerPath",
 					routePath: args.route,
 					requestType: args.httpMethodType,
+					dataAccessName: args.storedProcedureName,
 					properties: inputProps
 				}
+				createController(controllerArgs);
 			}
 		})
 		.catch((err) => console.error(err));

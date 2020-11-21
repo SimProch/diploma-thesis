@@ -29,7 +29,8 @@ export interface getControllerArguments {
     outputModelName: string;
     inputModelName: string;
 	classMethodName: string;
-	routePath: string;
+    routePath: string;
+    dataAccessName: string;
 	requestType: "POST" | "GET";
 	properties: ModelProperties[];
 }

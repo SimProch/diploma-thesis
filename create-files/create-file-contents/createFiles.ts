@@ -60,7 +60,12 @@ export function createDataAccess(
 	};
 	const dataAccessMethod = getDataAccess(dataAccessArgs);
 	const commandDefinition = getCommandDefinition(commandDefinitionArgs);
-	const fileContents = `public class DataAccess { ${LINE_END + dataAccessMethod + LINE_END + LINE_END + commandDefinition + LINE_END}}`;
+	const spaceBetween = LINE_END + LINE_END
+	const fileStart = `public class DataAccess {${spaceBetween}`
+	const dataAccessContents = dataAccessMethod + spaceBetween;
+	const commandDefinitionContents = commandDefinition + LINE_END;
+	const fileEnd = `}`
+	const fileContents = fileStart + dataAccessContents + commandDefinitionContents + fileEnd
 	fs.appendFile(filePath, fileContents, (err) => postCreateCallback(err, filePath));
 }
 

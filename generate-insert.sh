@@ -1,0 +1,1 @@
+ts-node index.ts generate --storedProcedureName="add_main_data" --callType="ExecuteNonQuery"

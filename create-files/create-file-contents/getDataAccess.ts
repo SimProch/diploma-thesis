@@ -62,7 +62,7 @@ function getQueryParameters(methodType: MethodCallType, properties: ModelPropert
 	});
 	if (hasGuid) result += `            cacheRevision${hasCancellation ? ", " : ''} ${LINE_END}`;
 	if (hasCancellation) result += `            cancellationToken ${LINE_END}`;
-	result += "    );" + LINE_END;
+	result += "        );" + LINE_END;
 	return result;
 }
 
