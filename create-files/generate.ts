@@ -6,6 +6,7 @@ import { CommandArguments } from "../types/cli.types";
 import { CommandDefinitionProperties, InterfaceProperties, ModelProperties } from "../types/mapping.types";
 import { InputList, OutputList } from "../types/queries.types";
 import { createTsInterface, createCsModel, createDataAccess } from "./create-file-contents/createFiles";
+import { getControllerArguments } from "./create-file-contents/types/file-contents.types";
 import {
 	getCommandDefinitionPropertiesFromRecordList,
 	getInterfacePropertiesFromRecordList,
@@ -15,6 +16,8 @@ import {
 export function generate(args: CommandArguments) {
 	getProcedureParams()
 		.then((res) => {
+			let inputModelName = "";
+			let outputModelName = "";
 			if (args.generateInterface) {
 				const inputProperties: InterfaceProperties[] = getInterfacePropertiesFromRecordList(res[0]);
 				const outputProperties: InterfaceProperties[] = getInterfacePropertiesFromRecordList(res[1]);
@@ -24,8 +27,10 @@ export function generate(args: CommandArguments) {
 			if (args.generateModel) {
 				const inputProperties: ModelProperties[] = getModelPropertiesFromRecordList(res[0]);
 				const outputProperties: ModelProperties[] = getModelPropertiesFromRecordList(res[1]);
-				createCsModel("inputModel", inputProperties);
-				createCsModel("outputModel", outputProperties);
+				inputModelName = "inputModel"
+				outputModelName = "outputModel"
+				createCsModel(inputModelName, inputProperties);
+				createCsModel(outputModelName, outputProperties);
 			}
 			if (args.generateDataAccess) {
 				const commandDefinitionProperties: CommandDefinitionProperties[] = getCommandDefinitionPropertiesFromRecordList(res[0]);
@@ -33,7 +38,16 @@ export function generate(args: CommandArguments) {
 				createDataAccess(args.callType, args.schema, args.storedProcedureName, commandDefinitionProperties, dataAccessArguments);
 			}
 			if (args.generateController) {
-				
+				const inputProps: ModelProperties[] = getModelPropertiesFromRecordList(res[0]);
+				const controllerArgs: getControllerArguments = {
+					methodType: args.callType,
+					outputModelName: outputModelName,
+					inputModelName: inputModelName,
+					classMethodName: args.controllerPath,
+					routePath: args.route,
+					requestType: args.httpMethodType,
+					properties: inputProps
+				}
 			}
 		})
 		.catch((err) => console.error(err));

@@ -1,21 +1,17 @@
 import { MethodCallType } from "../../types/cli.types";
 import { ModelProperties } from "../../types/mapping.types";
+import { getDataAccessArguments } from "./types/file-contents.types";
 
 const LINE_END = "\r\n";
 const asyncMethods: MethodCallType[] = ["ExecuteToObjectsAsync", "ExecuteToDynamicAsync", "ExecuteToCacheAsync"];
 
-export default function getDataAccess(
-	methodType: MethodCallType,
-	spName: string,
-	modelName: string,
-	properties: ModelProperties[]
-): string {
-	const resultType = getTypeBasedOnCallMethod(methodType, modelName);
-	const methodStart = `    public ${resultType} ${spName}(${LINE_END}`;
-	const args = getQueryArguments(methodType, properties);
-	const methodBody = getQueryBody(methodType, spName, modelName, properties);
+export default function getDataAccess(args: getDataAccessArguments): string {
+	const resultType = getTypeBasedOnCallMethod(args.methodType, args.modelName);
+	const methodStart = `    public ${resultType} ${args.spName}(${LINE_END}`;
+	const queryArgs = getQueryArguments(args.methodType, args.properties);
+	const methodBody = getQueryBody(args.methodType, args.spName, args.modelName, args.properties);
 	const methodEnd = `    }`;
-	const result = methodStart + args + methodBody + methodEnd;
+	const result = methodStart + queryArgs + methodBody + methodEnd;
 	return result;
 }
 

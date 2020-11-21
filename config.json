@@ -5,6 +5,7 @@
         "schema": "ui",
         "generateInterface": true,
         "generateModel": true,
-        "generateDataAccess": true
+        "generateDataAccess": true,
+        "generateController": true
     }
 }
