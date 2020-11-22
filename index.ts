@@ -1,7 +1,8 @@
 #!/usr/bin/env node
 
+import * as chalk from "chalk";
 import * as yargs from "yargs";
-import { configure, getConfigObject, initializeConfig } from "./configure";
+import { configureGlobal, getConfigObject, initializeConfig } from "./configure";
 import { generate } from "./create-files/generate";
 import { initSqlConfig } from "./database-connection/databaseConnection";
 import { listDatabases } from "./database-connection/listDatabases";
@@ -14,7 +15,10 @@ import { CommandArguments, GlobalConfiguration, MethodCallType } from "./types/c
 initializeConfig();
 initSqlConfig();
 
-const argv = getListingCommands(getConfigCommand(getGenerateCommand(yargs(process.argv.slice(2))))).argv;
+const generateCommand = getGenerateCommand(yargs(process.argv.slice(2)));
+const configCommand = getConfigCommand(generateCommand);
+const listingCommands = getListingCommands(configCommand);
+const argv = listingCommands.argv;
 
 function getGenerateCommand(yargs: yargs.Argv): yargs.Argv {
 	return yargs.command(
@@ -191,7 +195,7 @@ function getConfigCommand(yargs: yargs.Argv): yargs.Argv {
 				dataAccessPath: argv.dataAccessPath,
 				controllerPath: argv.controllerPath,
 			};
-			configure(config);
+			configureGlobal(config);
 		}
 	);
 }
@@ -203,8 +207,11 @@ function getListingCommands(yargs: yargs.Argv): yargs.Argv {
 			"List available databases",
 			(yargs: yargs.Argv) => yargs,
 			(argv) => listDatabases().then(res => {
-				console.log("Resulting properties:");
-        		console.log(res);
+				console.log(chalk.green("Resulting properties:"));
+				console.log(res);
+				process.exit();
+			}).catch(err => {
+				throw new Error(err);
 			})
 		)
 		.command(
@@ -220,8 +227,11 @@ function getListingCommands(yargs: yargs.Argv): yargs.Argv {
 					.alias("db", "database");
 			},
 			(argv) => listSchemas(argv.database).then(res => {
-				console.log("Resulting properties:");
-        		console.log(res);
+				console.log(chalk.green("Resulting properties:"));
+				console.log(res);
+				process.exit();
+			}).catch(err => {
+				throw new Error(err);
 			})
 		)
 		.command(
@@ -243,8 +253,11 @@ function getListingCommands(yargs: yargs.Argv): yargs.Argv {
 					.alias("s", "schema");
 			},
 			(argv) => listStoredProcedures(argv.database, argv.schema).then(res => {
-				console.log("Resulting properties:");
-        		console.log(res);
+				console.log(chalk.green("Resulting properties:"));
+				console.log(res);
+				process.exit();
+			}).catch(err => {
+				throw new Error(err);
 			})
 		)
 		.command(
@@ -271,8 +284,11 @@ function getListingCommands(yargs: yargs.Argv): yargs.Argv {
 					.alias("sp", "storedProcedureName");
 			},
 			(argv) => listProcedureInput(argv.database, argv.schema, argv.storedProcedureName).then(res => {
-				console.log("Resulting properties:");
+				console.log(chalk.green("Resulting properties:"));
         		console.log(res);
+				process.exit();
+			}).catch(err => {
+				throw new Error(err);
 			})
 		)
 		.command(
@@ -299,8 +315,11 @@ function getListingCommands(yargs: yargs.Argv): yargs.Argv {
 					.alias("sp", "storedProcedureName");
 			},
 			(argv) => listProcedureOutput(argv.database, argv.schema, argv.storedProcedureName).then(res => {
-				console.log("Resulting properties:");
+				console.log(chalk.green("Resulting properties:"));
         		console.log(res);
+				process.exit();
+			}).catch(err => {
+				throw new Error(err);
 			})
 		);
 }

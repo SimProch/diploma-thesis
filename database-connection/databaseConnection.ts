@@ -17,6 +17,11 @@ export function initSqlConfig(): void {
 	};
 }
 
+export function updateSqlConfig(server: string, database: string): void {
+	if (server) config.server = server;
+	if (database) config.database = database;
+}
+
 export async function tryConnect(): Promise<sql.ConnectionPool> {
 	try {
 		const pool = new sql.ConnectionPool(config);

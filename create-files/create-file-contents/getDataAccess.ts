@@ -1,3 +1,4 @@
+import * as chalk from "chalk";
 import { MethodCallType } from "../../types/cli.types";
 import { ModelProperties } from "../../types/mapping.types";
 import { getDataAccessArguments } from "./types/file-contents.types";
@@ -22,7 +23,7 @@ function getTypeBasedOnCallMethod(methodType: MethodCallType, modelName: string)
 	if (methodType === "ExecuteToDynamic") return `Task<dynamic>`;
 	if (methodType === "ExecuteToDynamicAsync") return `Task<IList<dynamic>>`;
 	if (methodType === "ExecuteNonQuery") return "void";
-	throw new Error("Unknown call type!");
+	throw new Error(chalk.red("Unknown call type!"));
 }
 
 function getQueryArguments(methodType: MethodCallType, properties: ModelProperties[]): string {
@@ -30,9 +31,9 @@ function getQueryArguments(methodType: MethodCallType, properties: ModelProperti
 	const hasGuid = methodType === "ExecuteToCacheAsync";
 	const hasCancellation = asyncMethods.includes(methodType);
 	properties.forEach((i) => {
-		result += `        ${i.typeName} ${i.propertyName}${hasGuid || hasCancellation ? ", " : ''} ${LINE_END}`;
+		result += `        ${i.typeName} ${i.propertyName}${hasGuid || hasCancellation ? ", " : ""} ${LINE_END}`;
 	});
-	if (hasGuid) result += `        Guid? cacheRevision${hasCancellation ? ", " : ''} ${LINE_END}`;
+	if (hasGuid) result += `        Guid? cacheRevision${hasCancellation ? ", " : ""} ${LINE_END}`;
 	if (hasCancellation) result += `        CancellationToken cancellationToken ${LINE_END}`;
 	result += "    )" + LINE_END + "    {" + LINE_END;
 	return result;
@@ -58,16 +59,10 @@ function getQueryParameters(methodType: MethodCallType, properties: ModelPropert
 	const hasGuid = methodType === "ExecuteToCacheAsync";
 	const hasCancellation = asyncMethods.includes(methodType);
 	properties.forEach((i) => {
-		result += `            ${i.propertyName}${hasGuid || hasCancellation ? ", " : ''} ${LINE_END}`;
+		result += `            ${i.propertyName}${hasGuid || hasCancellation ? ", " : ""} ${LINE_END}`;
 	});
-	if (hasGuid) result += `            cacheRevision${hasCancellation ? ", " : ''} ${LINE_END}`;
+	if (hasGuid) result += `            cacheRevision${hasCancellation ? ", " : ""} ${LINE_END}`;
 	if (hasCancellation) result += `            cancellationToken ${LINE_END}`;
 	result += "        );" + LINE_END;
 	return result;
 }
-
-/*
-public IEnumerable<OutputProperties> storedProcedure() {
-    return p_StoredProcedure.ExecuteToMethod<OutputProperties>(Context, OutputProperties.map(i => i.name));
-}
-*/

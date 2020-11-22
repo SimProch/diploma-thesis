@@ -1,0 +1,1 @@
+ts-node index.ts listSpOutputs --sp="fetch_main_data"

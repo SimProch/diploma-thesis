@@ -1,0 +1,1 @@
+ts-node index.ts listSpInputs --sp="add_main_data"

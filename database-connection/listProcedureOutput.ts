@@ -1,13 +1,14 @@
 import * as sql from "mssql/msnodesqlv8";
+import * as chalk from "chalk";
 import { DBType } from "../types/mapping.types";
 import { DbDescriptionType, OutputList } from "../types/queries.types";
 import { tryConnect } from "./databaseConnection";
 import { getDbTypeListQuery, getProcedureOutputListQuery } from "./queries";
 
 export function listProcedureOutput(databaseName: string, schemaName: string, storedProcedureName: string): Promise<OutputList> {
-	if (!databaseName) throw new Error("This command requires a database specified");
-	if (!schemaName) throw new Error("This command requires a schema specified");
-	if (!storedProcedureName) throw new Error("This command requires a stored procedure name specified");
+	if (!databaseName) throw new Error(chalk.red("This command requires a database specified"));
+	if (!schemaName) throw new Error(chalk.red("This command requires a schema specified"));
+	if (!storedProcedureName) throw new Error(chalk.red("This command requires a stored procedure name specified"));
 	return tryConnect().then(doListStoredProcedureOutput);
 
 	async function doListStoredProcedureOutput(pool: sql.ConnectionPool): Promise<OutputList> {
@@ -21,7 +22,7 @@ export function listProcedureOutput(databaseName: string, schemaName: string, st
 				outputName: output.name,
 				variableName: variableName,
 				maxLength: output.max_length,
-				isNullable: output.is_nullable
+				isNullable: output.is_nullable,
 			};
 		});
 		return result;

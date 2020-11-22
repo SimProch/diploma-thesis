@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 
+import * as chalk from "chalk";
 import { listProcedureInput } from "../database-connection/listProcedureInput";
 import { listProcedureOutput } from "../database-connection/listProcedureOutput";
 import { CommandArguments } from "../types/cli.types";
@@ -18,24 +19,27 @@ export function generate(args: CommandArguments) {
 		.then((res) => {
 			let inputModelName = "";
 			let outputModelName = "";
+			const promises: Array<Promise<string>> = [];
 			if (args.generateInterface) {
 				const inputProperties: InterfaceProperties[] = getInterfacePropertiesFromRecordList(res[0]);
 				const outputProperties: InterfaceProperties[] = getInterfacePropertiesFromRecordList(res[1]);
-				createTsInterface("inputInterface", inputProperties);
-				createTsInterface("outputInterface", outputProperties);
+				promises.push(createTsInterface("inputInterface", inputProperties));
+				promises.push(createTsInterface("outputInterface", outputProperties));
 			}
 			if (args.generateModel) {
 				const inputProperties: ModelProperties[] = getModelPropertiesFromRecordList(res[0]);
 				const outputProperties: ModelProperties[] = getModelPropertiesFromRecordList(res[1]);
-				inputModelName = "inputModel"
-				outputModelName = "outputModel"
-				createCsModel(inputModelName, inputProperties);
-				createCsModel(outputModelName, outputProperties);
+				inputModelName = "inputModel";
+				outputModelName = "outputModel";
+				promises.push(createCsModel(inputModelName, inputProperties));
+				promises.push(createCsModel(outputModelName, outputProperties));
 			}
 			if (args.generateDataAccess) {
 				const commandDefinitionProperties: CommandDefinitionProperties[] = getCommandDefinitionPropertiesFromRecordList(res[0]);
 				const dataAccessArguments: ModelProperties[] = getModelPropertiesFromRecordList(res[0]);
-				createDataAccess(args.callType, args.schema, args.storedProcedureName, commandDefinitionProperties, dataAccessArguments);
+				promises.push(
+					createDataAccess(args.callType, args.schema, args.storedProcedureName, commandDefinitionProperties, dataAccessArguments)
+				);
 			}
 			if (args.generateController) {
 				const inputProps: ModelProperties[] = getModelPropertiesFromRecordList(res[0]);
@@ -47,10 +51,14 @@ export function generate(args: CommandArguments) {
 					routePath: args.route,
 					requestType: args.httpMethodType,
 					dataAccessName: args.storedProcedureName,
-					properties: inputProps
-				}
-				createController(controllerArgs);
+					properties: inputProps,
+				};
+				promises.push(createController(controllerArgs));
 			}
+
+			Promise.all(promises)
+				.then((res) => onPromisesResolved(res))
+				.catch((err) => onPromisesError(err));
 		})
 		.catch((err) => console.error(err));
 
@@ -59,4 +67,20 @@ export function generate(args: CommandArguments) {
 		const outputs = await listProcedureOutput(args.database, args.schema, args.storedProcedureName);
 		return Promise.all([inputs, outputs]);
 	}
+}
+
+function onPromisesResolved(res: string[]): void {
+	res.forEach((fileName) => {
+		console.log("Created " + fileName);
+	});
+	const message = chalk.green("Files were successfully created");
+	console.log(message);
+	process.exit();
+}
+
+function onPromisesError(err: NodeJS.ErrnoException[]): void {
+	console.error(err);
+	const message = chalk.red("There were some errors creating files. See logged errors above");
+	console.log(message);
+	process.exit(1);
 }

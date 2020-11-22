@@ -1,23 +1,20 @@
-public class DataAccess { 
-    public Task<ICacheableData<IDbMultiResult<modelName>>> add_main_data(
-        int id,  
-        string description_name,  
-        DateTime when_joined,  
-        double bank_status,  
-        bool is_insured,  
-        Guid? cacheRevision,  
-        CancellationToken cancellationToken 
+public class DataAccess {
+
+    public void add_main_data(
+        int id 
+        string description_name 
+        DateTime when_joined 
+        double bank_status 
+        bool is_insured 
     )
     {
-        return add_main_data.ExecuteToCacheAsync<modelName>(
-            id,  
-            description_name,  
-            when_joined,  
-            bank_status,  
-            is_insured,  
-            cacheRevision,  
-            cancellationToken 
-    );
+        add_main_data.ExecuteNonQuery(
+            id 
+            description_name 
+            when_joined 
+            bank_status 
+            is_insured 
+        );
     }
 
     private static CommandDefinition add_main_data = CommandDefinition.DefineSp({

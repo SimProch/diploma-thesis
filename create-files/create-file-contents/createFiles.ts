@@ -18,25 +18,29 @@ import {
 const LINE_END = "\r\n";
 const rootDirectory = path.dirname(require.main.filename);
 
-export function createTsInterface(interfaceName: string, props: InterfaceProperties[]): void {
-	const filePath = `${rootDirectory}/result/${interfaceName}.ts`;
-	deleteFileIfExists(filePath);
-	const getInterfaceArgs: getInterfaceArguments = {
-		interfaceName: interfaceName,
-		properties: props,
-	};
-	const newInterface = getInterface(getInterfaceArgs);
-	fs.appendFile(filePath, newInterface, (err) => postCreateCallback(err, filePath));
+export function createTsInterface(interfaceName: string, props: InterfaceProperties[]): Promise<string> {
+	return new Promise((resolve, reject) => {
+		const filePath = `${rootDirectory}/result/${interfaceName}.ts`;
+		deleteFileIfExists(filePath);
+		const getInterfaceArgs: getInterfaceArguments = {
+			interfaceName: interfaceName,
+			properties: props,
+		};
+		const newInterface = getInterface(getInterfaceArgs);
+		fs.appendFile(filePath, newInterface, (err) => postCreateCallback(err, filePath, resolve, reject));
+	});
 }
-export function createCsModel(modelName: string, props: ModelProperties[]): void {
-	const filePath = `${rootDirectory}/result/${modelName}.cs`;
-	deleteFileIfExists(filePath);
-	const getModelArgs: getModelArguments = {
-		modelName: modelName,
-		properties: props,
-	};
-	const newModel = getModel(getModelArgs);
-	fs.appendFile(filePath, newModel, (err) => postCreateCallback(err, filePath));
+export function createCsModel(modelName: string, props: ModelProperties[]): Promise<string> {
+	return new Promise((resolve, reject) => {
+		const filePath = `${rootDirectory}/result/${modelName}.cs`;
+		deleteFileIfExists(filePath);
+		const getModelArgs: getModelArguments = {
+			modelName: modelName,
+			properties: props,
+		};
+		const newModel = getModel(getModelArgs);
+		fs.appendFile(filePath, newModel, (err) => postCreateCallback(err, filePath, resolve, reject));
+	});
 }
 export function createDataAccess(
 	methodType: MethodCallType,
@@ -44,42 +48,46 @@ export function createDataAccess(
 	spName: string,
 	props: CommandDefinitionProperties[],
 	modelProps: ModelProperties[]
-): void {
-	const filePath = `${rootDirectory}/result/${spName}.cs`;
-	deleteFileIfExists(filePath);
-	const dataAccessArgs: getDataAccessArguments = {
-		methodType: methodType,
-		spName: spName,
-		modelName: "modelName",
-		properties: modelProps,
-	};
-	const commandDefinitionArgs: getCommandDefinitionArguments = {
-		schema: schema,
-		spName: spName,
-		properties: props,
-	};
-	const dataAccessMethod = getDataAccess(dataAccessArgs);
-	const commandDefinition = getCommandDefinition(commandDefinitionArgs);
-	const spaceBetween = LINE_END + LINE_END
-	const fileStart = `public class DataAccess {${spaceBetween}`
-	const dataAccessContents = dataAccessMethod + spaceBetween;
-	const commandDefinitionContents = commandDefinition + LINE_END;
-	const fileEnd = `}`
-	const fileContents = fileStart + dataAccessContents + commandDefinitionContents + fileEnd
-	fs.appendFile(filePath, fileContents, (err) => postCreateCallback(err, filePath));
+): Promise<string> {
+	return new Promise((resolve, reject) => {
+		const filePath = `${rootDirectory}/result/${spName}.cs`;
+		deleteFileIfExists(filePath);
+		const dataAccessArgs: getDataAccessArguments = {
+			methodType: methodType,
+			spName: spName,
+			modelName: "modelName",
+			properties: modelProps,
+		};
+		const commandDefinitionArgs: getCommandDefinitionArguments = {
+			schema: schema,
+			spName: spName,
+			properties: props,
+		};
+		const dataAccessMethod = getDataAccess(dataAccessArgs);
+		const commandDefinition = getCommandDefinition(commandDefinitionArgs);
+		const spaceBetween = LINE_END + LINE_END;
+		const fileStart = `public class DataAccess {${spaceBetween}`;
+		const dataAccessContents = dataAccessMethod + spaceBetween;
+		const commandDefinitionContents = commandDefinition + LINE_END;
+		const fileEnd = `}`;
+		const fileContents = fileStart + dataAccessContents + commandDefinitionContents + fileEnd;
+		fs.appendFile(filePath, fileContents, (err) => postCreateCallback(err, filePath, resolve, reject));
+	});
 }
 
-export function createController(args: getControllerArguments): void {
-	const filePath = `${rootDirectory}/result/${args.classMethodName}.cs`;
-	deleteFileIfExists(filePath);
-	const controller = getController(args);
-	fs.appendFile(filePath, controller, (err) => postCreateCallback(err, filePath));
+export function createController(args: getControllerArguments): Promise<string> {
+	return new Promise((resolve, reject) => {
+		const filePath = `${rootDirectory}/result/${args.classMethodName}.cs`;
+		deleteFileIfExists(filePath);
+		const controller = getController(args);
+		fs.appendFile(filePath, controller, (err) => postCreateCallback(err, filePath, resolve, reject));
+	});
 }
 
 function deleteFileIfExists(fileName: string): void {
 	if (fs.existsSync(fileName)) fs.unlinkSync(fileName);
 }
-function postCreateCallback(err: NodeJS.ErrnoException, fileName: string) {
-	if (err) throw err;
-	console.log(`Created ${fileName}`);
+function postCreateCallback(err: NodeJS.ErrnoException, fileName: string, resolve: Function, reject: Function): void {
+	if (err) reject(err);
+	resolve(fileName);
 }

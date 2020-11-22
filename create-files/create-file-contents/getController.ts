@@ -1,3 +1,4 @@
+import * as chalk from "chalk";
 import { MethodCallType } from "../../types/cli.types";
 import { ModelProperties, TSType } from "../../types/mapping.types";
 import { getControllerArguments } from "./types/file-contents.types";
@@ -46,7 +47,7 @@ function getTypeBasedOnCallMethod(methodType: MethodCallType, modelName: string)
 	if (methodType === "ExecuteToDynamic") return `Task<dynamic>`;
 	if (methodType === "ExecuteToDynamicAsync") return `async Task<IList<dynamic>>`;
 	if (methodType === "ExecuteNonQuery") return "dynamic";
-	throw new Error("Unknown call type!");
+	throw new Error(chalk.red("Unknown call type!"));
 }
 
 function getMethodArguments(
@@ -68,7 +69,7 @@ function getStandardProperties(
 	properties: ModelProperties[],
 	inputPropertiesName: string
 ): string {
-	if (requestType === "POST") return inputPropertiesName;
+	if (requestType === "POST") return `        ${inputPropertiesName} inputArguments`;
 	const hasGuid = methodType === "ExecuteToCacheAsync";
 	const hasCancellation = asyncMethods.includes(methodType);
 	let result = "";
@@ -92,18 +93,25 @@ function getMethodContents(args: getControllerArguments): string {
 	const hasType = typedMethods.includes(args.methodType);
 	const generics = hasType ? `<${args.outputModelName}>` : "";
 	const dataAccessCall = `${args.dataAccessName}.${args.methodType}${generics}(${LINE_END}`;
-	const parameters = getDataAccessParameters(args.methodType, args.properties);
+	const parameters = getDataAccessParameters(args.methodType, args.requestType, args.inputModelName, args.properties);
 	result += dataAccessCall;
 	result += parameters;
 	return result;
 }
 
-function getDataAccessParameters(methodType: MethodCallType, properties: ModelProperties[]): string {
+function getDataAccessParameters(
+	methodType: MethodCallType,
+	requestType: "POST" | "GET",
+	inputName: string,
+	properties: ModelProperties[]
+): string {
 	let result = "";
 	const hasGuid = methodType === "ExecuteToCacheAsync";
 	const hasCancellation = asyncMethods.includes(methodType);
 	properties.forEach((i) => {
-		result += `            ${i.propertyName}${hasGuid || hasCancellation ? ", " : ""} ${LINE_END}`;
+		result += `            ${requestType === "POST" ? inputName + "." : ""}${i.propertyName}${
+			hasGuid || hasCancellation ? ", " : ""
+		} ${LINE_END}`;
 	});
 	if (hasGuid) result += `            cacheRevision${hasCancellation ? ", " : ""} ${LINE_END}`;
 	if (hasCancellation) result += `            cancellationToken ${LINE_END}`;
