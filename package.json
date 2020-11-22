@@ -1,13 +1,9 @@
 {
-	"name": "file-generator",
+	"name": "dt-lgx-dafg",
 	"version": "1.0.0",
-	"description": "File generator test",
-	"main": "index.js",
-	"scripts": {
-		"start": "ts-node index.ts"
-	},
-	"author": "",
-	"license": "ISC",
+	"description": "Logex Data Access File Generator for diploma thesis",
+	"main": "index.ts",
+	"author": "Simon Prochazka",
 	"dependencies": {
 		"chalk": "^4.1.0",
 		"fs-extra": "^9.0.1",
