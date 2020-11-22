@@ -1,3 +1,5 @@
+#!/usr/bin/env node
+
 import { DataAccessEnumType } from "../../types/mapping.types";
 import { getCommandDefinitionArguments } from "./types/file-contents.types";
 

@@ -1,3 +1,5 @@
+#!/usr/bin/env node
+
 import {
 	ModelProperties,
 	mapDbToCsModel,
@@ -15,7 +17,7 @@ export function getCommandDefinitionPropertiesFromRecordList(res: (Output | Inpu
 			propertyName: name.charAt(0) === "@" ? name.slice(1) : name,
 			typeName: mapDbToCsCommandDefinition(i.variableName),
 			isNullable: i.isNullable,
-			maxLength: i.maxLength
+			maxLength: i.maxLength,
 		};
 	});
 }
@@ -27,7 +29,7 @@ export function getModelPropertiesFromRecordList(res: (Output | Input)[]): Model
 			propertyName: name.charAt(0) === "@" ? name.slice(1) : name,
 			typeName: mapDbToCsModel(i.variableName),
 			isNullable: i.isNullable,
-			maxLength: i.maxLength
+			maxLength: i.maxLength,
 		};
 	});
 }
@@ -39,7 +41,7 @@ export function getInterfacePropertiesFromRecordList(res: (Output | Input)[]): I
 			propertyName: name.charAt(0) === "@" ? name.slice(1) : name,
 			typeName: mapDbToTsTsInterface(i.variableName),
 			isNullable: i.isNullable,
-			maxLength: i.maxLength
+			maxLength: i.maxLength,
 		};
 	});
 }

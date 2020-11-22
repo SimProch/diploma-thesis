@@ -1,3 +1,5 @@
+#!/usr/bin/env node
+
 import * as chalk from "chalk";
 import { MethodCallType } from "../../types/cli.types";
 import { ModelProperties } from "../../types/mapping.types";

@@ -1,3 +1,5 @@
+#!/usr/bin/env node
+
 import { CSType } from "../../types/mapping.types";
 import { getModelArguments } from "./types/file-contents.types";
 

@@ -1,3 +1,5 @@
+#!/usr/bin/env node
+
 import * as sql from "mssql/msnodesqlv8";
 import { getConfigObject } from "../configure";
 
@@ -25,7 +27,7 @@ export function updateSqlConfig(server: string, database: string): void {
 export async function tryConnect(): Promise<sql.ConnectionPool> {
 	try {
 		const pool = new sql.ConnectionPool(config);
-		return await pool.connect()
+		return await pool.connect();
 	} catch (error) {
 		throw new Error(error);
 	}

@@ -1,3 +1,5 @@
+#!/usr/bin/env node
+
 type NonTypedCallTypes = "ExecuteToDynamic" | "ExecuteToDynamicAsync";
 type TypedCallTypes = "ExecuteToObjects" | "ExecuteToObjectsAsync" | "ExecuteToCacheAsync";
 type VoidCallTypes = "ExecuteNonQuery";

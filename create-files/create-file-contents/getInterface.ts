@@ -1,3 +1,5 @@
+#!/usr/bin/env node
+
 import { TSType } from "../../types/mapping.types";
 import { getInterfaceArguments } from "./types/file-contents.types";
 

@@ -1,3 +1,5 @@
+#!/usr/bin/env node
+
 export type CSType = "string" | "int" | "Int16" | "Int64" | "byte" | "Guid" | "DateTime" | "double" | "decimal" | "bool";
 export type TSType = "string" | "number" | "date" | "boolean";
 export type DBType = keyof typeof DbToCsCommandDefinition;

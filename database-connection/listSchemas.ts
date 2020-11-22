@@ -1,3 +1,5 @@
+#!/usr/bin/env node
+
 import * as sql from "mssql/msnodesqlv8";
 import * as chalk from "chalk";
 import { SchemaQueryResult } from "../types/queries.types";

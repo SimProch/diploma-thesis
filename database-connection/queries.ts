@@ -1,13 +1,14 @@
+#!/usr/bin/env node
+
 export function getDatabaseListQuery(): string {
-    return `SELECT name FROM master.sys.databases
+	return `SELECT name FROM master.sys.databases
     WHERE Cast(CASE WHEN name IN ('master', 'model', 'msdb', 'tempdb') THEN 1 ELSE is_distributor END As bit) = 0
    `;
 }
 
 export function getStoredProcedureListQuery(databaseName: string, schema?: string): string {
-    if (!schema) return `SELECT ROUTINE_NAME FROM ${databaseName}.INFORMATION_SCHEMA.ROUTINES WHERE ROUTINE_TYPE = 'PROCEDURE'`;
+	if (!schema) return `SELECT ROUTINE_NAME FROM ${databaseName}.INFORMATION_SCHEMA.ROUTINES WHERE ROUTINE_TYPE = 'PROCEDURE'`;
 	return `SELECT ROUTINE_NAME FROM ${databaseName}.INFORMATION_SCHEMA.ROUTINES WHERE ROUTINE_TYPE = 'PROCEDURE' AND ROUTINE_SCHEMA = '${schema}'`;
-
 }
 
 export function getSchemaListQuery(databaseName: string): string {
@@ -16,13 +17,13 @@ export function getSchemaListQuery(databaseName: string): string {
 }
 
 export function getProcedureOutputListQuery(databaseName: string, schemaName: string, storedProcedureName: string): string {
-    return `EXEC sp_describe_first_result_set N'${databaseName}.${schemaName}.${storedProcedureName}'`
+	return `EXEC sp_describe_first_result_set N'${databaseName}.${schemaName}.${storedProcedureName}'`;
 }
 
 export function getProcedureInputListQuery(databaseName: string, schemaName: string, storedProcedureName: string): string {
-    return `SELECT name, system_type_id, is_nullable, max_length FROM ${databaseName}.sys.parameters WHERE object_id = object_id('${databaseName}.${schemaName}.${storedProcedureName}')`
+	return `SELECT name, system_type_id, is_nullable, max_length FROM ${databaseName}.sys.parameters WHERE object_id = object_id('${databaseName}.${schemaName}.${storedProcedureName}')`;
 }
 
 export function getDbTypeListQuery(databaseName): string {
-    return `SELECT name, system_type_id FROM ${databaseName}.sys.types`;
+	return `SELECT name, system_type_id FROM ${databaseName}.sys.types`;
 }

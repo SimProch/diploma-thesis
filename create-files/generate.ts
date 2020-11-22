@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 
 import * as chalk from "chalk";
+import { configure } from "../configure";
 import { listProcedureInput } from "../database-connection/listProcedureInput";
 import { listProcedureOutput } from "../database-connection/listProcedureOutput";
 import { CommandArguments } from "../types/cli.types";
@@ -57,7 +58,7 @@ export function generate(args: CommandArguments) {
 			}
 
 			Promise.all(promises)
-				.then((res) => onPromisesResolved(res))
+				.then((res) => onPromisesResolved(res, args))
 				.catch((err) => onPromisesError(err));
 		})
 		.catch((err) => console.error(err));
@@ -69,11 +70,12 @@ export function generate(args: CommandArguments) {
 	}
 }
 
-function onPromisesResolved(res: string[]): void {
+function onPromisesResolved(res: string[], args: CommandArguments): void {
 	res.forEach((fileName) => {
 		console.log("Created " + fileName);
 	});
 	const message = chalk.green("Files were successfully created");
+	configure(args.storedProcedureName, args);
 	console.log(message);
 	process.exit();
 }

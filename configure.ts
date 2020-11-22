@@ -1,3 +1,5 @@
+#!/usr/bin/env node
+
 import { CommandArguments, Configuration, GlobalConfiguration } from "./types/cli.types";
 import * as fs from "fs-extra";
 import { DEFAULT_DB_NAME, DEFAULT_SERVER_NAME } from "./database-connection/databaseConnection";
@@ -27,6 +29,7 @@ export function configureGlobal(config: GlobalConfiguration): void {
 
 export function configure(namespace: string, config: CommandArguments | GlobalConfiguration): void {
 	Object.keys(config).forEach((key) => {
+		if (!globalConfig[namespace]) globalConfig[namespace] = {} as any;
 		if (config[key]) addKeyValuePair(globalConfig[namespace], key, config[key]);
 	});
 }

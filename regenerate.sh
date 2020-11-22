@@ -1,0 +1,1 @@
+ts-node index.ts regenerate --sp="add_main_data"

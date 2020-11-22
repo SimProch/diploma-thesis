@@ -1,3 +1,5 @@
+#!/usr/bin/env node
+
 import { MethodCallType } from "../../../types/cli.types";
 import { CommandDefinitionProperties, InterfaceProperties, ModelProperties } from "../../../types/mapping.types";
 
@@ -26,11 +28,11 @@ export interface getDataAccessArguments {
 
 export interface getControllerArguments {
 	methodType: MethodCallType;
-    outputModelName: string;
-    inputModelName: string;
+	outputModelName: string;
+	inputModelName: string;
 	classMethodName: string;
-    routePath: string;
-    dataAccessName: string;
+	routePath: string;
+	dataAccessName: string;
 	requestType: "POST" | "GET";
 	properties: ModelProperties[];
 }
