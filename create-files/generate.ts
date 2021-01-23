@@ -45,13 +45,13 @@ export function generate(args: CommandArguments) {
 			if (args.generateController) {
 				const inputProps: ModelProperties[] = getModelPropertiesFromRecordList(res[0]);
 				const controllerArgs: getControllerArguments = {
-					methodType: args.callType,
-					outputModelName: outputModelName,
-					inputModelName: inputModelName,
-					classMethodName: "controllerPath",
+					methodType: args.callType || "ExecuteToObjects",
+					outputModelName: outputModelName || "outputModelName",
+					inputModelName: inputModelName || "inputModelName",
+					classMethodName: args.controllerPath || "controllerPath",
 					routePath: args.route,
-					requestType: args.httpMethodType,
-					dataAccessName: args.storedProcedureName,
+					requestType: args.httpMethodType || "GET",
+					dataAccessName: args.storedProcedureName || "storedProcedureName",
 					properties: inputProps,
 				};
 				promises.push(createController(controllerArgs));
@@ -72,6 +72,7 @@ export function generate(args: CommandArguments) {
 
 function onPromisesResolved(res: string[], args: CommandArguments): void {
 	res.forEach((fileName) => {
+		if (fileName == null) return;
 		console.log("Created " + fileName);
 	});
 	const message = chalk.green("Files were successfully created");

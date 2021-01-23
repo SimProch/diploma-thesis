@@ -2,6 +2,7 @@
 
 import * as fs from "fs-extra";
 import * as path from "path";
+import * as chalk from "chalk";
 import { MethodCallType } from "../../types/cli.types";
 import { CommandDefinitionProperties, InterfaceProperties, ModelProperties } from "../../types/mapping.types";
 import getCommandDefinition from "./getCommandDefinition";
@@ -22,6 +23,12 @@ const rootDirectory = path.dirname(require.main.filename);
 
 export function createTsInterface(interfaceName: string, props: InterfaceProperties[]): Promise<string> {
 	return new Promise((resolve, reject) => {
+		if (props.length == 0) {
+			const msg = chalk.yellow(`There are no properties for ${interfaceName}. Skipping creation of TS interface.`);
+			console.log(msg);
+			resolve(null);
+			return;
+		}
 		const filePath = `${rootDirectory}/result/${interfaceName}.ts`;
 		deleteFileIfExists(filePath);
 		const getInterfaceArgs: getInterfaceArguments = {
@@ -34,6 +41,12 @@ export function createTsInterface(interfaceName: string, props: InterfacePropert
 }
 export function createCsModel(modelName: string, props: ModelProperties[]): Promise<string> {
 	return new Promise((resolve, reject) => {
+		if (props.length == 0) {
+			const msg = chalk.yellow(`There are no properties for ${modelName}. Skipping creation of TS interface.`);
+			console.log(msg);
+			resolve(null);
+			return;
+		}
 		const filePath = `${rootDirectory}/result/${modelName}.cs`;
 		deleteFileIfExists(filePath);
 		const getModelArgs: getModelArguments = {

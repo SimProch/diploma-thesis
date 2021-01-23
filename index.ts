@@ -116,8 +116,8 @@ function getGenerateCommand(yargs: yargs.Argv): yargs.Argv {
 				generateInterface: argv.generateInterface,
 				dataAccessPath: argv.dataAccessPath,
 				controllerPath: argv.controllerPath,
-				storedProcedureName: argv.storedProcedureName,
-				route: argv.route,
+				storedProcedureName: argv.storedProcedureName as string,
+				route: argv.route as string,
 				httpMethodType: argv.httpMethodType as "POST" | "GET",
 			};
 			generate(commandArgs);

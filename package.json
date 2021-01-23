@@ -4,6 +4,10 @@
 	"description": "Logex Data Access File Generator for diploma thesis",
 	"main": "index.ts",
 	"author": "Simon Prochazka",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/SimProch/diploma-thesis"
+	},
 	"dependencies": {
 		"chalk": "^4.1.0",
 		"fs-extra": "^9.0.1",
