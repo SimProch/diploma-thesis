@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 import * as chalk from "chalk";
-import { configure } from "../configure";
+import { configure } from "../../configure";
 import { listProcedureInput } from "../database-connection/listProcedureInput";
 import { listProcedureOutput } from "../database-connection/listProcedureOutput";
 import { CommandArguments } from "../types/cli.types";

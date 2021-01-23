@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 import * as sql from "mssql/msnodesqlv8";
-import { getConfigObject } from "../configure";
+import { getConfigObject } from "../../configure";
 
 export const DEFAULT_DB_NAME = "master";
 export const DEFAULT_SERVER_NAME: string = "localhost\\SQLEXPRESS01";

@@ -1,16 +1,19 @@
 {
 	"name": "dt-lgx-dafg",
-	"version": "1.0.0",
+	"version": "1.0.1",
 	"description": "Logex Data Access File Generator for diploma thesis",
 	"main": "index.ts",
-	"license": "MIT",
+	"bin": {
+		"dt-lgx-dafg": "./lib/index.js"
+	},
+	"license": "ISC",
 	"author": "Simon Prochazka",
 	"repository": {
 		"type": "git",
 		"url": "https://github.com/SimProch/diploma-thesis"
 	},
 	"scripts": {
-		"start": "ts-node index.ts",
+		"start": "node ./lib/index.js",
 		"build": "tsc -p .",
 		"listSp": "./examples/listSp.sh"
 	},

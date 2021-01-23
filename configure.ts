@@ -1,8 +1,8 @@
 #!/usr/bin/env node
 
-import { CommandArguments, Configuration, GlobalConfiguration } from "./types/cli.types";
+import { CommandArguments, Configuration, GlobalConfiguration } from "./src/types/cli.types";
 import * as fs from "fs-extra";
-import { DEFAULT_DB_NAME, DEFAULT_SERVER_NAME } from "./database-connection/databaseConnection";
+import { DEFAULT_DB_NAME, DEFAULT_SERVER_NAME } from "./src/database-connection/databaseConnection";
 
 const CONFIG_NAME = "config.json";
 const DEFAULT_CONFIG = {
