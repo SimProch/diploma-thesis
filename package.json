@@ -8,6 +8,9 @@
 		"type": "git",
 		"url": "https://github.com/SimProch/diploma-thesis"
 	},
+	"scripts": {
+		
+	},
 	"dependencies": {
 		"chalk": "^4.1.0",
 		"fs-extra": "^9.0.1",
