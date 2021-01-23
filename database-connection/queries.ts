@@ -24,6 +24,6 @@ export function getProcedureInputListQuery(databaseName: string, schemaName: str
 	return `SELECT name, system_type_id, is_nullable, max_length FROM ${databaseName}.sys.parameters WHERE object_id = object_id('${databaseName}.${schemaName}.${storedProcedureName}')`;
 }
 
-export function getDbTypeListQuery(databaseName): string {
+export function getDbTypeListQuery(databaseName: string): string {
 	return `SELECT name, system_type_id FROM ${databaseName}.sys.types`;
 }

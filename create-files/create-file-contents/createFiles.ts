@@ -19,9 +19,9 @@ import {
 } from "./types/file-contents.types";
 
 const LINE_END = "\r\n";
-const rootDirectory = path.dirname(require.main.filename);
+const rootDirectory = path.dirname(require.main!.filename);
 
-export function createTsInterface(interfaceName: string, props: InterfaceProperties[]): Promise<string> {
+export function createTsInterface(interfaceName: string, props: InterfaceProperties[]): Promise<string | null> {
 	return new Promise((resolve, reject) => {
 		if (props.length == 0) {
 			const msg = chalk.yellow(`There are no properties for ${interfaceName}. Skipping creation of TS interface.`);
@@ -39,7 +39,7 @@ export function createTsInterface(interfaceName: string, props: InterfacePropert
 		fs.appendFile(filePath, newInterface, (err) => postCreateCallback(err, filePath, resolve, reject));
 	});
 }
-export function createCsModel(modelName: string, props: ModelProperties[]): Promise<string> {
+export function createCsModel(modelName: string, props: ModelProperties[]): Promise<string | null> {
 	return new Promise((resolve, reject) => {
 		if (props.length == 0) {
 			const msg = chalk.yellow(`There are no properties for ${modelName}. Skipping creation of TS interface.`);

@@ -20,7 +20,7 @@ export function generate(args: CommandArguments) {
 		.then((res) => {
 			let inputModelName = "";
 			let outputModelName = "";
-			const promises: Array<Promise<string>> = [];
+			const promises: Array<Promise<string | null>> = [];
 			if (args.generateInterface) {
 				const inputProperties: InterfaceProperties[] = getInterfacePropertiesFromRecordList(res[0]);
 				const outputProperties: InterfaceProperties[] = getInterfacePropertiesFromRecordList(res[1]);
@@ -70,7 +70,7 @@ export function generate(args: CommandArguments) {
 	}
 }
 
-function onPromisesResolved(res: string[], args: CommandArguments): void {
+function onPromisesResolved(res: (string | null)[], args: CommandArguments): void {
 	res.forEach((fileName) => {
 		if (fileName == null) return;
 		console.log("Created " + fileName);

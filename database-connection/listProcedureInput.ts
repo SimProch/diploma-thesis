@@ -19,7 +19,7 @@ export function listProcedureInput(databaseName: string, schemaName: string, sto
 			.recordsets[0];
 		const types = (await request.query<DbDescriptionType>(getDbTypeListQuery(databaseName))).recordsets[0];
 		const result: InputList = inputs.map((input) => {
-			const variableName = types.find((type) => type.system_type_id === input.system_type_id).name as DBType;
+			const variableName = types.find((type) => type.system_type_id === input.system_type_id)!.name as DBType;
 			return {
 				inputName: input.name,
 				variableName: variableName,

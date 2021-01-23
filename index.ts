@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 import * as chalk from "chalk";
-import * as yargs from "yargs";
+import yargs = require("yargs");
 import { configureGlobal, getConfigObject, initializeConfig } from "./configure";
 import { generate } from "./create-files/generate";
 import { initSqlConfig } from "./database-connection/databaseConnection";
@@ -187,16 +187,16 @@ function getConfigCommand(yargs: yargs.Argv): yargs.Argv {
 				},
 				(argv) => {
 					const config: GlobalConfiguration = {
-						server: argv.server,
-						database: argv.database,
-						schema: argv.schema,
+						server: argv.server as string,
+						database: argv.database as string,
+						schema: argv.schema as string,
 						callType: argv.callType as MethodCallType,
-						generateController: argv.generateController,
-						generateDataAccess: argv.generateDataAccess,
-						generateModel: argv.generateModel,
-						generateInterface: argv.generateInterface,
-						dataAccessPath: argv.dataAccessPath,
-						controllerPath: argv.controllerPath,
+						generateController: argv.generateController as boolean,
+						generateDataAccess: argv.generateDataAccess as boolean,
+						generateModel: argv.generateModel as boolean,
+						generateInterface: argv.generateInterface as boolean,
+						dataAccessPath: argv.dataAccessPath as string,
+						controllerPath: argv.controllerPath as string,
 					};
 					configureGlobal(config);
 				}
@@ -314,6 +314,7 @@ function getListingCommands(yargs: yargs.Argv): yargs.Argv {
 					.option("storedProcedureName", {
 						string: true,
 						description: "Specifies the of schema from which stored procedures should be fetched",
+						demandOption: true
 					})
 					.alias("db", "database")
 					.alias("s", "schema")
@@ -348,6 +349,7 @@ function getListingCommands(yargs: yargs.Argv): yargs.Argv {
 					.option("storedProcedureName", {
 						string: true,
 						description: "Specifies the of schema from which stored procedures should be fetched",
+						demandOption: true
 					})
 					.alias("db", "database")
 					.alias("s", "schema")
@@ -375,6 +377,7 @@ function getRegenrateCommand(yargs: yargs.Argv): yargs.Argv {
 				.option("storedProcedureName", {
 					string: true,
 					description: "Specifies already generated stored procedure",
+					demandOption: true
 				})
 				.alias("sp", "storedProcedureName");
 		},
