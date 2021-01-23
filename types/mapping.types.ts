@@ -66,6 +66,24 @@ export enum DbToCsharpModel {
 	numeric = "decimal",
 	money = "decimal",
 	bit = "bool",
+
+	// To pass TS strict compilation, unused types
+	binary = "dynamic",
+	char = "dynamic",
+	datetimeoffset = "dynamic",
+	image = "dynamic",
+	nchar = "dynamic",
+	ntext = "dynamic",
+	real = "dynamic",
+	rowversion = "dynamic",
+	smalldatetime = "dynamic",
+	smallmoney = "dynamic",
+	sql_variant = "dynamic",
+	text = "dynamic",
+	time = "dynamic",
+	timestamp = "dynamic",
+	varbinary = "dynamic",
+	xml = "dynamic",
 }
 
 export enum DbToTsInterface {
@@ -84,6 +102,24 @@ export enum DbToTsInterface {
 	numeric = "number",
 	money = "number",
 	bit = "boolean",
+
+	// To pass TS strict compilation, unused types
+	binary = "any",
+	char = "any",
+	datetimeoffset = "any",
+	image = "any",
+	nchar = "any",
+	ntext = "any",
+	real = "any",
+	rowversion = "any",
+	smalldatetime = "any",
+	smallmoney = "any",
+	sql_variant = "any",
+	text = "any",
+	time = "any",
+	timestamp = "any",
+	varbinary = "any",
+	xml = "any",
 }
 
 export enum DbToCsCommandDefinition {

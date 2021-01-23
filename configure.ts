@@ -34,8 +34,8 @@ export function configure(namespace: string, config: CommandArguments | GlobalCo
 	});
 }
 
-function addKeyValuePair(namespace: object, key: string, value: string | number | boolean) {
-	namespace[key] = value;
+function addKeyValuePair(namespace: { [key: string]: any }, key: string, value: string | number | boolean) {
+	namespace[key]= value;
 	fs.writeFileSync(CONFIG_NAME, JSON.stringify(globalConfig, null, 4), { encoding: "utf8" });
 }
 

@@ -16,6 +16,7 @@ export interface GlobalConfiguration {
 	generateInterface: boolean;
 	dataAccessPath: string;
 	controllerPath: string;
+	[key: string]: any; // To compile
 }
 
 export interface CommandArguments extends GlobalConfiguration {
