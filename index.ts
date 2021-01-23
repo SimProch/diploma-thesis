@@ -1,7 +1,8 @@
 #!/usr/bin/env node
 
-import * as chalk from "chalk";
+import chalk = require("chalk");
 import yargs = require("yargs");
+import figlet = require("figlet");
 import { configureGlobal, getConfigObject, initializeConfig } from "./configure";
 import { generate } from "./create-files/generate";
 import { initSqlConfig } from "./database-connection/databaseConnection";
@@ -20,6 +21,8 @@ const configCommand = getConfigCommand(generateCommand);
 const listingCommands = getListingCommands(configCommand);
 const regenerateCommand = getRegenrateCommand(listingCommands);
 const argv = regenerateCommand.argv;
+
+console.log(chalk.red(figlet.textSync("dt-lgx-dafg", { horizontalLayout: "full" })));
 
 function getGenerateCommand(yargs: yargs.Argv): yargs.Argv {
 	return yargs.command(
@@ -314,7 +317,7 @@ function getListingCommands(yargs: yargs.Argv): yargs.Argv {
 					.option("storedProcedureName", {
 						string: true,
 						description: "Specifies the of schema from which stored procedures should be fetched",
-						demandOption: true
+						demandOption: true,
 					})
 					.alias("db", "database")
 					.alias("s", "schema")
@@ -349,7 +352,7 @@ function getListingCommands(yargs: yargs.Argv): yargs.Argv {
 					.option("storedProcedureName", {
 						string: true,
 						description: "Specifies the of schema from which stored procedures should be fetched",
-						demandOption: true
+						demandOption: true,
 					})
 					.alias("db", "database")
 					.alias("s", "schema")
@@ -371,13 +374,13 @@ function getListingCommands(yargs: yargs.Argv): yargs.Argv {
 function getRegenrateCommand(yargs: yargs.Argv): yargs.Argv {
 	return yargs.command(
 		"regenerate",
-		"List ",
+		"Generate previously generated Data Access by specifying stored procedure name",
 		(yargs: yargs.Argv) => {
 			return yargs
 				.option("storedProcedureName", {
 					string: true,
 					description: "Specifies already generated stored procedure",
-					demandOption: true
+					demandOption: true,
 				})
 				.alias("sp", "storedProcedureName");
 		},

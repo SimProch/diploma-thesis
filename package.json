@@ -3,16 +3,20 @@
 	"version": "1.0.0",
 	"description": "Logex Data Access File Generator for diploma thesis",
 	"main": "index.ts",
+	"license": "MIT",
 	"author": "Simon Prochazka",
 	"repository": {
 		"type": "git",
 		"url": "https://github.com/SimProch/diploma-thesis"
 	},
 	"scripts": {
-		
+		"start": "ts-node index.ts",
+		"build": "tsc -p .",
+		"listSp": "./examples/listSp.sh"
 	},
 	"dependencies": {
 		"chalk": "^4.1.0",
+		"figlet": "^1.5.0",
 		"fs-extra": "^9.0.1",
 		"msnodesqlv8": "^2.0.7",
 		"mssql": "^6.2.3",
@@ -22,6 +26,7 @@
 	},
 	"devDependencies": {
 		"@types/chalk": "^2.2.0",
+		"@types/figlet": "^1.2.1",
 		"@types/fs-extra": "^9.0.2",
 		"@types/mssql": "^6.0.5",
 		"@types/node": "^14.14.6",
