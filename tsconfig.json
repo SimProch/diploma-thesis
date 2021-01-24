@@ -11,5 +11,6 @@
 		"esModuleInterop": true,
 		"resolveJsonModule": true
 	},
+	"include": ["config.json"],
 	"exclude": ["result", "lib"]
 }

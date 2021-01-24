@@ -1,6 +1,6 @@
 {
 	"name": "dt-lgx-dafg",
-	"version": "1.0.2",
+	"version": "1.0.3",
 	"description": "Logex Data Access File Generator for diploma thesis",
 	"main": "index.ts",
 	"bin": {

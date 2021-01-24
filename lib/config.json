@@ -1,0 +1,35 @@
+{
+    "global": {
+        "server": "localhost\\SQLEXPRESS01",
+        "database": "DataAccessGenerator_v2",
+        "schema": "ui",
+        "generateInterface": true,
+        "generateModel": true,
+        "generateDataAccess": true,
+        "generateController": true
+    },
+    "add_main_data": {
+        "server": "localhost\\SQLEXPRESS01",
+        "database": "DataAccessGenerator_v2",
+        "schema": "ui",
+        "callType": "ExecuteNonQuery",
+        "generateController": true,
+        "generateDataAccess": true,
+        "generateModel": true,
+        "generateInterface": true,
+        "storedProcedureName": "add_main_data",
+        "httpMethodType": "POST"
+    },
+    "fetch_main_data": {
+        "server": "localhost\\SQLEXPRESS01",
+        "database": "DataAccessGenerator_v2",
+        "schema": "ui",
+        "callType": "ExecuteToCacheAsync",
+        "generateController": true,
+        "generateDataAccess": true,
+        "generateModel": true,
+        "generateInterface": true,
+        "storedProcedureName": "fetch_main_data",
+        "httpMethodType": "GET"
+    }
+}
