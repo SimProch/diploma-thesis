@@ -11,6 +11,6 @@
 		"esModuleInterop": true,
 		"resolveJsonModule": true
 	},
-	"include": ["config.json"],
+	"include": ["src/**/*", "config.json", "configure.ts", "index.ts"],
 	"exclude": ["result", "lib"]
 }
