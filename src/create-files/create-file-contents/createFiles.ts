@@ -1,7 +1,6 @@
 #!/usr/bin/env node
 
 import * as fs from "fs-extra";
-import * as path from "path";
 import chalk = require("chalk");
 import { MethodCallType } from "../../types/cli.types";
 import { CommandDefinitionProperties, InterfaceProperties, ModelProperties } from "../../types/mapping.types";
@@ -19,7 +18,8 @@ import {
 } from "./types/file-contents.types";
 
 const LINE_END = "\r\n";
-const rootDirectory = path.dirname(require.main!.filename);
+const calledFromPath = process.cwd();
+const resultPath = `${calledFromPath}/result`
 
 export function createTsInterface(interfaceName: string, props: InterfaceProperties[]): Promise<string | null> {
 	return new Promise((resolve, reject) => {
@@ -29,7 +29,8 @@ export function createTsInterface(interfaceName: string, props: InterfacePropert
 			resolve(null);
 			return;
 		}
-		const filePath = `${rootDirectory}/result/${interfaceName}.ts`;
+		const filePath = `${resultPath}/${interfaceName}.ts`;
+		createResultDirectory();
 		deleteFileIfExists(filePath);
 		const getInterfaceArgs: getInterfaceArguments = {
 			interfaceName: interfaceName,
@@ -47,7 +48,8 @@ export function createCsModel(modelName: string, props: ModelProperties[]): Prom
 			resolve(null);
 			return;
 		}
-		const filePath = `${rootDirectory}/result/${modelName}.cs`;
+		const filePath = `${resultPath}/${modelName}.cs`;
+		createResultDirectory();
 		deleteFileIfExists(filePath);
 		const getModelArgs: getModelArguments = {
 			modelName: modelName,
@@ -65,7 +67,8 @@ export function createDataAccess(
 	modelProps: ModelProperties[]
 ): Promise<string> {
 	return new Promise((resolve, reject) => {
-		const filePath = `${rootDirectory}/result/${spName}.cs`;
+		const filePath = `${resultPath}/${spName}.cs`;
+		createResultDirectory();
 		deleteFileIfExists(filePath);
 		const dataAccessArgs: getDataAccessArguments = {
 			methodType: methodType,
@@ -92,7 +95,8 @@ export function createDataAccess(
 
 export function createController(args: getControllerArguments): Promise<string> {
 	return new Promise((resolve, reject) => {
-		const filePath = `${rootDirectory}/result/${args.classMethodName}.cs`;
+		const filePath = `${resultPath}/${args.classMethodName}.cs`;
+		createResultDirectory();
 		deleteFileIfExists(filePath);
 		const controller = getController(args);
 		fs.appendFile(filePath, controller, (err) => postCreateCallback(err, filePath, resolve, reject));
@@ -102,6 +106,13 @@ export function createController(args: getControllerArguments): Promise<string> 
 function deleteFileIfExists(fileName: string): void {
 	if (fs.existsSync(fileName)) fs.unlinkSync(fileName);
 }
+
+function createResultDirectory(): void {
+	if (!fs.existsSync(resultPath)){
+		fs.mkdirSync(resultPath);
+	}
+}
+
 function postCreateCallback(err: NodeJS.ErrnoException, fileName: string, resolve: Function, reject: Function): void {
 	if (err) reject(err);
 	resolve(fileName);

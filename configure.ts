@@ -2,21 +2,23 @@
 
 import { CommandArguments, Configuration, GlobalConfiguration } from "./src/types/cli.types";
 import * as fs from "fs-extra";
+import * as path from "path";
 import { DEFAULT_DB_NAME, DEFAULT_SERVER_NAME } from "./src/database-connection/databaseConnection";
 
-const CONFIG_NAME = "config.json";
+const rootDirectory = path.dirname(require.main!.filename);
+const CONFIG_PATH = `${rootDirectory}/config.json`;
 const DEFAULT_CONFIG = {
 	global: {},
 };
 let globalConfig: Configuration;
 
 export function initializeConfig(): void {
-	const hasExistingConfig = fs.existsSync(CONFIG_NAME);
+	const hasExistingConfig = fs.existsSync(CONFIG_PATH);
 	if (!hasExistingConfig) {
-		fs.writeFileSync(CONFIG_NAME, JSON.stringify(DEFAULT_CONFIG), { encoding: "utf8" });
+		fs.writeFileSync(CONFIG_PATH, JSON.stringify(DEFAULT_CONFIG), { encoding: "utf8" });
 	}
 
-	const JSONconfig = fs.readFileSync(CONFIG_NAME, { encoding: "utf8" });
+	const JSONconfig = fs.readFileSync(CONFIG_PATH, { encoding: "utf8" });
 	globalConfig = JSON.parse(JSONconfig);
 }
 
@@ -36,7 +38,7 @@ export function configure(namespace: string, config: CommandArguments | GlobalCo
 
 function addKeyValuePair(namespace: { [key: string]: any }, key: string, value: string | number | boolean) {
 	namespace[key]= value;
-	fs.writeFileSync(CONFIG_NAME, JSON.stringify(globalConfig, null, 4), { encoding: "utf8" });
+	fs.writeFileSync(CONFIG_PATH, JSON.stringify(globalConfig, null, 4), { encoding: "utf8" });
 }
 
 export function getConfigObject(): Configuration {
