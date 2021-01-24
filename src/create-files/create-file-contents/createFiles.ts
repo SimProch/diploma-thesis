@@ -2,7 +2,7 @@
 
 import * as fs from "fs-extra";
 import * as path from "path";
-import * as chalk from "chalk";
+import chalk = require("chalk");
 import { MethodCallType } from "../../types/cli.types";
 import { CommandDefinitionProperties, InterfaceProperties, ModelProperties } from "../../types/mapping.types";
 import getCommandDefinition from "./getCommandDefinition";

@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-import * as chalk from "chalk";
+import chalk = require("chalk");
 import { MethodCallType } from "../../types/cli.types";
 import { ModelProperties } from "../../types/mapping.types";
 import { getDataAccessArguments } from "./types/file-contents.types";

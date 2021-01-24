@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-import * as chalk from "chalk";
+import chalk = require("chalk");
 import { MethodCallType } from "../../types/cli.types";
 import { ModelProperties, TSType } from "../../types/mapping.types";
 import { getControllerArguments } from "./types/file-contents.types";

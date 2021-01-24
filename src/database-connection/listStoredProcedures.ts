@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 import * as sql from "mssql/msnodesqlv8";
-import * as chalk from "chalk";
+import chalk = require("chalk");
 import { StoredProcedureQueryResult } from "../types/queries.types";
 import { tryConnect } from "./databaseConnection";
 import { getStoredProcedureListQuery } from "./queries";
